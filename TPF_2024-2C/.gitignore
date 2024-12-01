@@ -57,6 +57,7 @@ dkms.conf
 
 ### Compilation Directory ###
 build
+bin
 
 ### Linux ###
 *~

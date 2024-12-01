@@ -2,13 +2,12 @@ TARGET = pdcServer
 
 SRC_DIR = ./src
 INC_DIR = ./inc
-OUT_DIR = ./build
+OUT_DIR = ./bin
 OBJ_DIR = $(OUT_DIR)/obj
 DOC_DIR = $(OUT_DIR)/doc
 
 CC = gcc
 CFLAGS = -Wall -std=c99 -pedantic
-DEFINES =
 
 SRC_FILES = $(wildcard $(SRC_DIR)/*.c)
 OBJ_FILES = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC_FILES))
@@ -24,7 +23,7 @@ all: $(OBJ_FILES)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@echo Compilando $<
 	@mkdir -p $(OBJ_DIR)
-	$(CC) $(CFLAGS) -o $@ -c $< -I$(INC_DIR) -MMD -D$(DEFINES)
+	$(CC) $(CFLAGS) -o $@ -c $< -I$(INC_DIR) -MMD
 
 clean:
 	@rm -r $(OUT_DIR)
@@ -33,19 +32,20 @@ run: $(OUT_DIR)/$(TARGET)
 	@echo Ejecutando $<
 	@./$(OUT_DIR)/$(TARGET)
 
-debug: $(BUILD_DIR)/$(TARGET)
+debug: $(OUT_DIR)/$(TARGET)
 	@echo "Debugging $<..."
-	@valgrind --leak-check=full --show-leak-kinds=all -s ./$(BUILD_DIR)/$(TARGET)
+	@valgrind --leak-check=full --show-leak-kinds=all -s ./$(OUT_DIR)/$(TARGET)
 
 doc:
 	@mkdir -p $(DOC_DIR)
 	@doxygen doxyfile
+	@open $(DOC_DIR)/html/index.html
 
-check:  $(SRC_DIR)/%.c
+check:  $(SRC_FILES)
 	@echo Verificando el formato $<
 	@clang-format -style=file -dry-run $(SRC_FILES)
 
-format: $(SRC_DIR)/%.c
+format: $(SRC_FILES)
 	@echo Formateando $<
 	@clang-format -i $(SRC_FILES)
 
