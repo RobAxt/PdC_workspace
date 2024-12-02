@@ -5,6 +5,7 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "logger.h"
 
 // Estructura para representar la instancia Singleton
 typedef struct
@@ -36,14 +37,15 @@ int main(int argc, char* argv[])
 
   Singleton* s1 = get_instance();
   Singleton* s2 = get_instance();
+  logger_t logger = loggerInit();
 
   // Ambos apuntan a la misma instancia
-  printf("%s:%d |  s1->data = %d, s2->data = %d\n", __FILE__, __LINE__, s1->data, s2->data);
-  printf("%s:%d | *s1 = %p, *s2 = %p\n", __FILE__, __LINE__, (void*)s1, (void*)s2);
+  loggerInfo(logger,  "s1->data = %d, s2->data = %d\n", s1->data, s2->data);
+  loggerDebug(logger, "*s1 = %p, *s2 = %p\n"          , (void*)s1, (void*)s2);
 
   // Liberar la memoria al finalizar
   free(instance);
   instance = NULL;
-
+  loggerDeinit(logger);
   return EXIT_SUCCESS;
 }

@@ -6,7 +6,7 @@
 #include <pthread.h>
 #include <stdio.h>
 
-#define LOGGER_FILENAME "./log/pdcServer.log"
+const char * const LOGGER_FILENAME = "./log/pdcServer.log";
 
 const char * levelNames[] = { "TRACE", "DEBUG", "INFO ", "WARN ", "ERROR", "FATAL" };
 
@@ -57,7 +57,8 @@ void loggerDeinit(logger_t logger)
   pthread_mutex_lock(&mutex);
   if(NULL != logger)
   {
-    free(instance);
+    close(instance->fd);
+	free(instance);
     instance = NULL;
   }
   pthread_mutex_unlock(&mutex);

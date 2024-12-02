@@ -1,0 +1,17 @@
+CNN - Convolution Neural Network
+1. Reconocimiento de imágenes. Las CNN son ampliamente utilizadas para clasificar
+y reconocer objetos en imágenes. Ejemplos incluyen reconocimiento facial, clasificación
+de animales, identificación de objetos en fotografías, etc.
+2. Segmentación de imágenes. Pueden utilizarse para dividir una imagen en segmentos
+y asignar etiquetas a cada segmento.
+3. Reconocimiento de patrones. Aplicadas en campos como medicina para analizar
+imágenes médicas y detectar patrones anómalos o enfermedades.
+4. Procesamiento de Vídeo. Se utilizan para analizar secuencias de video y extraer información
+relevante, como el seguimiento de objetos o la detección de actividades.
+5. Procesamiento de Lenguaje Natural (NLP). Aunque inicialmente diseñadas para
+imágenes, las CNN también se han adaptado con éxito para tareas de procesamiento
+de texto en NLP.
+6. Autos de Conducción. En el campo de vehículos autónomos, las CNN se emplean
+para la detección y clasificación de objetos en la carretera.
+7. Juegos y Realidad Virtual. Para reconocimiento de gestos, expresiones faciales y
+objetos en entornos virtuales.

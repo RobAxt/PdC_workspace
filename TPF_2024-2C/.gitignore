@@ -56,8 +56,8 @@ Mkfile.old
 dkms.conf
 
 ### Compilation Directory ###
-build
-bin
+build/obj
+bin/obj
 
 ### Linux ###
 *~

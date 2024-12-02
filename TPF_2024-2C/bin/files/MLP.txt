@@ -1,0 +1,11 @@
+MLP - Multi Layer Perceptron
+1. Clasificación. Clasificación binaria o multiclase. Ejemplos incluyen reconocimiento
+de dígitos escritos a mano, clasificación de imágenes y diagnóstico médico.
+2. Regresión. Predicción de valores numéricos. Se utiliza en problemas como la predicción
+de precios de acciones, series temporales y regresión de funciones.
+3. Aproximación de Funciones. Puede aproximar funciones no lineales y mapear relaciones
+complejas entre entradas y salidas.
+4. Procesamiento de Lenguaje Natural (NLP). Se aplica a tareas de procesamiento de
+lenguaje natural, como clasificación de texto y modelado de lenguaje.
+5. Sistemas de Recomendación. Utilizado en sistemas que recomiendan productos,
+contenido o conexiones sociales basándose en preferencias anteriores.
