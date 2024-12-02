@@ -8,6 +8,7 @@ DOC_DIR = $(OUT_DIR)/doc
 
 CC = gcc
 CFLAGS = -Wall -std=c99 -pedantic -O3
+DEFINES = -D_POSIX_C_SOURCE=200809L -D_GNU_SOURCE
 
 SRC_FILES = $(wildcard $(SRC_DIR)/*.c)
 OBJ_FILES = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC_FILES))
@@ -23,7 +24,7 @@ all: $(OBJ_FILES)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@echo Compilando $<
 	@mkdir -p $(OBJ_DIR)
-	$(CC) $(CFLAGS) -o $@ -c $< -I$(INC_DIR) -MMD
+	$(CC) $(CFLAGS) $(DEFINES) -o $@ -c $< -I$(INC_DIR) -MMD
 
 clean:
 	@rm -r $(OBJ_DIR)
@@ -31,11 +32,11 @@ clean:
 
 run: $(OUT_DIR)/$(TARGET)
 	@echo Ejecutando $<
-	@./$(OUT_DIR)/$(TARGET)
+	@cd $(OUT_DIR) && ./$(TARGET)
 
 debug: $(OUT_DIR)/$(TARGET)
 	@echo Debugging $<
-	@valgrind --leak-check=full --show-leak-kinds=all -s $(OUT_DIR)/$(TARGET)
+	cd $(OUT_DIR) && valgrind --leak-check=full --show-leak-kinds=all -s ./$(TARGET)
 
 doc:
 	@mkdir -p $(DOC_DIR)

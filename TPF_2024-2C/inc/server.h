@@ -4,9 +4,7 @@
 /** @file server.h
  ** @brief Declaración de la interface server
  **/
- 
- typedef struct server_s * server_t;
- 
- 
- 
- #endif
+
+typedef struct server_s* server_t;
+
+#endif
