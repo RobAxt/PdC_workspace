@@ -57,7 +57,7 @@ make clean
 
 ## Enunciado del proyecto
 
-[TPF 2024 2C Enunciado](./TP final 2024 2C.pdf)
+[TPF 2024 2C Enunciado](./TP%20final%202024%202C.pdf)
 
 ## Funcionamiento del Servidor
 
