@@ -1,6 +1,6 @@
-[INFO ] src/main.c:13 - Compilation Date Dec  3 2024 - 12:13:19
-[INFO ] src/serverConfig.c:125 - Nueva configuracion: sensitive = false
-[INFO ] src/serverConfig.c:125 - Nueva configuracion: TCPPort = 9998
-[INFO ] src/serverConfig.c:125 - Nueva configuracion: UDPPort = 9997
-[INFO ] src/serverConfig.c:125 - Nueva configuracion: timeout = 120
-[DEBUG] src/serverConfig.c:94 - Finalizado carga de configuracion custom
+[INFO ] src/main.c:13 - Compilation Date Dec  3 2024 - 17:18:45
+[INFO ] src/serverConfig.c:142 - Nueva configuracion: sensitive = false
+[INFO ] src/serverConfig.c:142 - Nueva configuracion: TCPPort = 9998
+[INFO ] src/serverConfig.c:142 - Nueva configuracion: UDPPort = 9997
+[INFO ] src/serverConfig.c:142 - Nueva configuracion: timeout = 120
+[DEBUG] src/serverConfig.c:117 - Finalizado carga de configuracion custom

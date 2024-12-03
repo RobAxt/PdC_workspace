@@ -3,6 +3,7 @@
  **/
 #include "serverConfig.h"
 
+#include <ctype.h>
 #include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
@@ -26,6 +27,21 @@ struct serverConfig_s
   int UDPPort;
   int timeout;
 };
+
+typedef int (*action_t)(serverConfig_t server, int value);
+
+typedef struct
+{
+  char *key;
+  action_t action;
+} command_t;
+
+static command_t commands[] = {{"sensitive", setCaseSensitive},
+                               {"TCPPort", setTCPPort},
+                               {"UDPPort", setUDPPort},
+                               {"timeout", setTimeout}};
+
+static const int MAX_CMND = sizeof(commands) / sizeof(command_t);
 
 static void loadFileConfig(serverConfig_t config);
 static void parseLine(char *line, serverConfig_t config);
@@ -82,12 +98,18 @@ static void loadFileConfig(serverConfig_t config)
           break;
 
         case '\r':
+        case ' ':
           break;
 
         default:
           line[lineIndex++] = readBuffer[i];
-          if(lineIndex >= BUFFER_SIZE - 1)
-            loggerFatal("Error al parsear linea, configuracion puede estar corrupta");
+          if(lineIndex > BUFFER_SIZE)
+          {
+            loggerFatal("Linea excede los %d caracteres, configuracion puede estar corrupta",
+                        BUFFER_SIZE);
+            lineIndex = 0;
+            memset(line, '\0', BUFFER_SIZE);
+          }
       }
     }
   }
@@ -97,33 +119,27 @@ static void loadFileConfig(serverConfig_t config)
 
 static void parseLine(char *line, serverConfig_t config)
 {
-  char *key = strtok(line, " =");
-  char *value = strtok(NULL, " =");
+  char *key = strtok(line, "=");
+  char *value = strtok(NULL, "=");
+  int cmndIdx = 0;
 
   if(key && value)
   {
-    // Compara la clave y asigna el valor a la estructura
-    if(strcmp(key, "sensitive") == 0)
+    while(cmndIdx < MAX_CMND)
     {
-      config->sensitive = (strcmp(value, "true") == 0);
+      if(strcmp(key, commands[cmndIdx].key) == 0)
+      {
+        commands[cmndIdx].action(config,
+                                 isalpha(*value) ? (int)(strcmp(value, "true") == 0) : atoi(value));
+        break;
+      }
+      cmndIdx++;
     }
-    else if(strcmp(key, "TCPPort") == 0)
-    {
-      config->TCPPort = atoi(value);
-    }
-    else if(strcmp(key, "UDPPort") == 0)
-    {
-      config->UDPPort = atoi(value);
-    }
-    else if(strcmp(key, "timeout") == 0)
-    {
-      config->timeout = atoi(value);
-    }
+
+    if(cmndIdx == MAX_CMND)
+      loggerError("Clave/Valor desconocido: %s = %s", key, value);
     else
-    {
-      loggerWarn("Clave/Valor desconocido: %s = %s", key, value);
-    }
-    loggerInfo("Nueva configuracion: %s = %s", key, value);
+      loggerInfo("Nueva configuracion: %s = %s", key, value);
   }
   else
     loggerError("Linea mal formada: %s", line);
@@ -131,20 +147,76 @@ static void parseLine(char *line, serverConfig_t config)
 
 bool isCaseSensitive(serverConfig_t server)
 {
-  return server->sensitive;
+  if(NULL != server)
+    return server->sensitive;
+  return false;
 }
 
 int getTCPPort(serverConfig_t server)
 {
-  return server->TCPPort;
+  if(NULL != server)
+    return server->TCPPort;
+  return INVALID;
 }
 
 int getUDPPort(serverConfig_t server)
 {
-  return server->UDPPort;
+  if(NULL != server)
+    return server->UDPPort;
+  return INVALID;
 }
 
 int getTimeout(serverConfig_t server)
 {
-  return server->timeout;
+  if(NULL != server)
+    return server->timeout;
+  return INVALID;
+}
+
+int setCaseSensitive(serverConfig_t server, int sensitive)
+{
+  if(NULL != server)
+  {
+    server->sensitive = (bool)sensitive;
+    return sensitive;
+  }
+  return INVALID;
+}
+
+int setTCPPort(serverConfig_t server, int tcp)
+{
+  if(NULL != server)
+  {
+    server->TCPPort = tcp;
+    return tcp;
+  }
+  return INVALID;
+}
+
+int setUDPPort(serverConfig_t server, int udp)
+{
+  if(NULL != server)
+  {
+    server->UDPPort = udp;
+    return udp;
+  }
+  return INVALID;
+}
+
+int setTimeout(serverConfig_t server, int timeout)
+{
+  if(NULL != server)
+  {
+    server->timeout = timeout;
+    return timeout;
+  }
+  return INVALID;
+}
+
+void serverConfigDeinit(serverConfig_t server)
+{
+  if(NULL != server)
+  {
+    free(server);
+  }
 }

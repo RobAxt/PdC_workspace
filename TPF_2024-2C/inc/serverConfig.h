@@ -6,6 +6,8 @@
  **/
 #include <stdbool.h>
 
+#define INVALID -1
+
 typedef struct serverConfig_s* serverConfig_t;
 
 /**
@@ -47,4 +49,48 @@ int getUDPPort(serverConfig_t server);
  * @return int
  */
 int getTimeout(serverConfig_t server);
+
+/**
+ * @brief
+ *
+ * @param serverConfig_t
+ * @param bool
+ * @return bool
+ */
+int setCaseSensitive(serverConfig_t server, int sensitive);
+
+/**
+ * @brief
+ *
+ * @param serverConfig_t
+ * @param int
+ * @return int
+ */
+int setTCPPort(serverConfig_t server, int tcp);
+
+/**
+ * @brief
+ *
+ * @param serverConfig_t
+ * @param int
+ * @return int
+ */
+int setUDPPort(serverConfig_t server, int udp);
+
+/**
+ * @brief
+ *
+ * @param serverConfig_t
+ * @param int
+ * @return int
+ */
+int setTimeout(serverConfig_t server, int timeout);
+
+/**
+ * @brief Función para desalocar los datos del logger del sistema
+ *
+ * @param serverConfig_t Puntero al logger del sistema
+ * @return void
+ */
+void serverConfigDeinit(serverConfig_t server);
 #endif

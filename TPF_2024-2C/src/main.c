@@ -14,6 +14,7 @@ int main(int argc, char* argv[])
 
   serverConfig_t config = initServerConfig();
 
+  serverConfigDeinit(config);
   loggerDeinit();
   return EXIT_SUCCESS;
 }
