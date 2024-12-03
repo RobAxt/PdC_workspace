@@ -22,6 +22,7 @@ all: $(OBJ_FILES)
 	$(CC) $(CFLAGS) $(OBJ_FILES) -o $(OUT_DIR)/$(TARGET)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@clear
 	@echo Compilando $<
 	@mkdir -p $(OBJ_DIR)
 	$(CC) $(CFLAGS) $(DEFINES) -o $@ -c $< -I$(INC_DIR) -MMD

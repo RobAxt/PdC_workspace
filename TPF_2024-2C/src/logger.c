@@ -31,12 +31,19 @@ bool loggerInit(void)
   if(NULL == instance)
   {
     instance = (logger_t)malloc(sizeof(struct logger_s));
-    instance->fd = open(LOGGER_FILENAME, O_RDWR | O_TRUNC | O_CREAT, S_IRUSR | S_IWUSR);
-    if(instance->fd <= 0)
+    if(NULL == instance)
     {
-      perror("[ERROR] Error opening file for writing");
-      free(instance);
-      instance = NULL;
+      fprintf(stderr, "[ERROR] Unable to allocate logger instance\r\n");
+    }
+    else
+    {
+      instance->fd = open(LOGGER_FILENAME, O_RDWR | O_TRUNC | O_CREAT, S_IRUSR | S_IWUSR);
+      if(instance->fd <= 0)
+      {
+        perror("[ERROR] Error opening file for writing");
+        free(instance);
+        instance = NULL;
+      }
     }
   }
   pthread_mutex_unlock(&mutex);
@@ -61,7 +68,7 @@ void loggerLog(level_t level, const char *file, int line, const char *fmt, ...)
   vsprintf(message, fmt, args);
   va_end(args);
 
-  dprintf(instance->fd, "[%s] %s:%d - %s", levelNames[level], file, line, message);
+  dprintf(instance->fd, "[%s] %s:%d - %s\r\n", levelNames[level], file, line, message);
 
   pthread_mutex_unlock(&mutex);
 }

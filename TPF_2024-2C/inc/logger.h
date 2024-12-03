@@ -18,18 +18,18 @@ typedef enum
   FATAL
 } level_t;
 
-#define loggerTrace(logger, ...) loggerLog(TRACE, __FILE__, __LINE__, logger, __VA_ARGS__)
-#define loggerDebug(logger, ...) loggerLog(DEBUG, __FILE__, __LINE__, logger, __VA_ARGS__)
-#define loggerInfo(logger, ...)  loggerLog(INFO, __FILE__, __LINE__, logger, __VA_ARGS__)
-#define loggerWarn(logger, ...)  loggerLog(WARN, __FILE__, __LINE__, logger, __VA_ARGS__)
-#define loggerError(logger, ...) loggerLog(ERROR, __FILE__, __LINE__, logger, __VA_ARGS__)
-#define loggerFatal(logger, ...) loggerLog(FATAL, __FILE__, __LINE__, logger, __VA_ARGS__)
+#define loggerTrace(...) loggerLog(TRACE, __FILE__, __LINE__, __VA_ARGS__)
+#define loggerDebug(...) loggerLog(DEBUG, __FILE__, __LINE__, __VA_ARGS__)
+#define loggerInfo(...)  loggerLog(INFO, __FILE__, __LINE__, __VA_ARGS__)
+#define loggerWarn(...)  loggerLog(WARN, __FILE__, __LINE__, __VA_ARGS__)
+#define loggerError(...) loggerLog(ERROR, __FILE__, __LINE__, __VA_ARGS__)
+#define loggerFatal(...) loggerLog(FATAL, __FILE__, __LINE__, __VA_ARGS__)
 
 /**
  * @brief Función para crear u obtener el logger del sistema
  *
  * @param void
- * @return bool indicando si se pudo allocar o no el objeto
+ * @return bool Indicando si se pudo allocar o no el objeto
  */
 bool loggerInit(void);
 
