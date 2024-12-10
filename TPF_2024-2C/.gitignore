@@ -58,6 +58,7 @@ dkms.conf
 ### Compilation Directory ###
 build/obj
 bin/obj
+bin/log
 
 ### Linux ###
 *~
@@ -75,4 +76,3 @@ bin/obj
 .nfs*
 
 # End of https://www.toptal.com/developers/gitignore/api/c,linux
-build

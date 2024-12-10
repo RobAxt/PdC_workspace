@@ -22,7 +22,6 @@ all: $(OBJ_FILES)
 	$(CC) $(CFLAGS) $(OBJ_FILES) -o $(OUT_DIR)/$(TARGET)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	@clear
 	@echo Compilando $<
 	@mkdir -p $(OBJ_DIR)
 	$(CC) $(CFLAGS) $(DEFINES) -o $@ -c $< -I$(INC_DIR) -MMD
@@ -44,7 +43,7 @@ doc:
 	@doxygen doxyfile
 	@open $(DOC_DIR)/html/index.html
 
-check:  $(SRC_FILES)
+check:
 	@echo Verificando el formato $<
 	@clang-format -style=file -dry-run $(SRC_FILES)
 

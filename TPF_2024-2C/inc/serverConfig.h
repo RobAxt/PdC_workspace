@@ -87,9 +87,9 @@ int setUDPPort(serverConfig_t server, int udp);
 int setTimeout(serverConfig_t server, int timeout);
 
 /**
- * @brief Función para desalocar los datos del logger del sistema
+ * @brief
  *
- * @param serverConfig_t Puntero al logger del sistema
+ * @param serverConfig_t
  * @return void
  */
 void serverConfigDeinit(serverConfig_t server);

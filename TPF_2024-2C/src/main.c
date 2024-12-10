@@ -4,6 +4,7 @@
 #include <stdlib.h>
 
 #include "logger.h"
+#include "server.h"
 #include "serverConfig.h"
 
 int main(int argc, char* argv[])
@@ -12,9 +13,14 @@ int main(int argc, char* argv[])
 
   loggerInfo("Compilation Date %s - %s", __DATE__, __TIME__);
 
-  serverConfig_t config = initServerConfig();
+  server_t server = setupServerSockets();
 
-  serverConfigDeinit(config);
+  if(NULL != server)
+  {
+    loopServerClients(server);
+  }
+
+  serverDeinit(server);
   loggerDeinit();
   return EXIT_SUCCESS;
 }

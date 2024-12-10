@@ -53,7 +53,7 @@ serverConfig_t initServerConfig(void)
   if(NULL == this)
   {
     loggerFatal("Imposible alocar memoria para la configuracion del servidor");
-    exit(EXIT_FAILURE);
+    return NULL;
   }
 
   this->sensitive = DEFAULT_SENSITVE;
@@ -114,7 +114,7 @@ static void loadFileConfig(serverConfig_t config)
     }
   }
   close(fd);
-  loggerDebug("Finalizado carga de configuracion custom");
+  loggerDebug("Finalizada carga de configuracion custom");
 }
 
 static void parseLine(char *line, serverConfig_t config)
@@ -137,7 +137,7 @@ static void parseLine(char *line, serverConfig_t config)
     }
 
     if(cmndIdx == MAX_CMND)
-      loggerError("Clave/Valor desconocido: %s = %s", key, value);
+      loggerError("Clave-Valor desconocido: %s = %s", key, value);
     else
       loggerInfo("Nueva configuracion: %s = %s", key, value);
   }
