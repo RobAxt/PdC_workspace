@@ -36,7 +36,7 @@ run: $(OUT_DIR)/$(TARGET)
 
 debug: $(OUT_DIR)/$(TARGET)
 	@echo Debugging $<
-	cd $(OUT_DIR) && valgrind --leak-check=full --show-leak-kinds=all -s ./$(TARGET)
+	cd $(OUT_DIR) && valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes -s ./$(TARGET)
 
 doc:
 	@mkdir -p $(DOC_DIR)

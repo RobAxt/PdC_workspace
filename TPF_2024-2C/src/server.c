@@ -12,11 +12,12 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
+#include "handleTCPClient.h"
 #include "logger.h"
 #include "serverConfig.h"
 #include "serverStats.h"
 
-#define BUFFER_SIZE 1024
+#define BUFFER_SIZE 256
 #define MAX_CLIENTS 128
 #define MAX_PENDING 128
 
@@ -28,6 +29,7 @@ struct server_s
   int udpSocket;
   struct pollfd pollfds[MAX_CLIENTS];
   int nfds;
+  handleTCPClient_t TCPclientHandler[MAX_CLIENTS];
 };
 
 static server_t initServer();
@@ -81,6 +83,7 @@ static server_t initServer()
     return NULL;
   }
 
+  this->stats = NULL;
   // this->stats =  initServerStats();
   // if(NULL == this->stats)
   // {
@@ -90,7 +93,10 @@ static server_t initServer()
   //   return NULL;
   // }
 
+  memset(this->pollfds, '\0', sizeof(this->pollfds));
   this->nfds = 0;
+
+  memset(this->TCPclientHandler, '\0', sizeof(this->TCPclientHandler));
 
   return this;
 }
@@ -163,10 +169,12 @@ static serverStatus_t setupUDPServerSocket(server_t server)
 
 serverStatus_t loopServerClients(server_t server)
 {
-  int new_socket;
+  int new_socket = -1;
   struct sockaddr_in clientAddress;
   socklen_t clientAddressSize = sizeof(struct sockaddr_in);
   char buffer[BUFFER_SIZE] = {0};
+
+  memset(&clientAddress, '\0', clientAddressSize);
 
   while(1)
   {
@@ -187,8 +195,9 @@ serverStatus_t loopServerClients(server_t server)
         if(server->pollfds[i].fd == server->tcpPassiveSocket)
         {
           // Aceptar nueva conexión TCP
-          if((new_socket = accept(server->tcpPassiveSocket, (struct sockaddr *)&clientAddress,
-                                  (socklen_t *)&clientAddressSize)) < 0)
+          new_socket = accept(server->tcpPassiveSocket, (struct sockaddr *)&clientAddress,
+                              (socklen_t *)&clientAddressSize);
+          if(new_socket < 0)
           {
             loggerError("Error al aceptar conexión TCP: %s", strerror(errno));
             continue;
@@ -198,13 +207,14 @@ serverStatus_t loopServerClients(server_t server)
           // Añadir nuevo socket al conjunto de poll
           server->pollfds[server->nfds].fd = new_socket;
           server->pollfds[server->nfds].events = POLLIN;
+          server->TCPclientHandler[server->nfds] = handleTCPClientInit(server->config);
           server->nfds++;
         }
         else if(server->pollfds[i].fd == server->udpSocket)
         {
           // Leer datos del socket UDP
           int len = recvfrom(server->udpSocket, buffer, BUFFER_SIZE - 1, 0,
-                             (struct sockaddr *)&clientAddress, &clientAddressSize);
+                             (struct sockaddr *)&clientAddress, (socklen_t *)&clientAddressSize);
           if(len < 0)
           {
             loggerError("Error al recibir datos UDP: %s", strerror(errno));
@@ -226,12 +236,15 @@ serverStatus_t loopServerClients(server_t server)
             // Cerrar conexión TCP
             loggerInfo("Conexión cerrada");
             close(server->pollfds[i].fd);
-            server->pollfds[i] = server->pollfds[--server->nfds];
+            server->nfds--;
+            server->pollfds[i] = server->pollfds[server->nfds];
+            server->TCPclientHandler[i] = server->TCPclientHandler[server->nfds];
           }
           else
           {
             buffer[len] = '\0';
             loggerDebug("Mensaje TCP recibido: %s", buffer);
+            handleTCPClientInsert(server->TCPclientHandler[server->nfds], buffer, len);
             send(server->pollfds[i].fd, "Mensaje recibido\r\n", strlen("Mensaje recibido\r\n"), 0);
           }
         }
@@ -245,8 +258,11 @@ void serverDeinit(server_t server)
 {
   if(NULL != server)
   {
-    close(server->udpSocket);
-    close(server->tcpPassiveSocket);
+    for(int i = 0; i < server->nfds; i++)
+    {
+      close(server->pollfds[i].fd);
+      handleTCPClientDeinit(server->TCPclientHandler[i]);
+    }
     serverConfigDeinit(server->config);
     // serverStatsDeinit(server->stats);
     free(server);

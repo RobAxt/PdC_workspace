@@ -4,6 +4,7 @@
 /** @file server.h
  ** @brief Declaración de la interface server
  **/
+
 typedef enum
 {
   OK_SERVER = 0,
@@ -14,6 +15,7 @@ typedef enum
   POLL_ERROR,
   OOPS_ERROR
 } serverStatus_t;
+
 typedef struct server_s* server_t;
 
 /**
@@ -39,4 +41,5 @@ serverStatus_t loopServerClients(server_t server);
  * @return void
  */
 void serverDeinit(server_t server);
+
 #endif

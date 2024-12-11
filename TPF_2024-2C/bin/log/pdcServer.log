@@ -1,6 +1,12 @@
-[INFO ] src/main.c:13 - Compilation Date Dec  3 2024 - 17:18:45
+[INFO ] src/main.c:21 - Compilation Date Dec 11 2024 - 17:45:58
 [INFO ] src/serverConfig.c:142 - Nueva configuracion: sensitive = false
-[INFO ] src/serverConfig.c:142 - Nueva configuracion: TCPPort = 9998
-[INFO ] src/serverConfig.c:142 - Nueva configuracion: UDPPort = 9997
+[INFO ] src/serverConfig.c:142 - Nueva configuracion: TCPPort = 9999
+[INFO ] src/serverConfig.c:142 - Nueva configuracion: UDPPort = 9999
 [INFO ] src/serverConfig.c:142 - Nueva configuracion: timeout = 120
-[DEBUG] src/serverConfig.c:117 - Finalizado carga de configuracion custom
+[DEBUG] src/serverConfig.c:117 - Finalizada carga de configuracion custom
+[INFO ] src/server.c:136 - TCP Socket Listen to Port 9999
+[INFO ] src/server.c:166 - UDP Socket Bind to Port 9999
+[INFO ] src/server.c:205 - Nueva conexión TCP aceptada
+[DEBUG] src/server.c:244 - Mensaje TCP recibido: f
+[DEBUG] src/server.c:244 - Mensaje TCP recibido: d
+[DEBUG] src/server.c:244 - Mensaje TCP recibido:

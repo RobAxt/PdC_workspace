@@ -216,7 +216,5 @@ int setTimeout(serverConfig_t server, int timeout)
 void serverConfigDeinit(serverConfig_t server)
 {
   if(NULL != server)
-  {
     free(server);
-  }
 }
