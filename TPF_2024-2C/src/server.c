@@ -236,6 +236,7 @@ serverStatus_t loopServerClients(server_t server)
             // Cerrar conexión TCP
             loggerInfo("Conexión cerrada");
             close(server->pollfds[i].fd);
+            handleTCPClientDeinit(server->TCPclientHandler[i]);
             server->nfds--;
             server->pollfds[i] = server->pollfds[server->nfds];
             server->TCPclientHandler[i] = server->TCPclientHandler[server->nfds];

@@ -34,6 +34,7 @@ int main(int argc, char* argv[])
 
 void sigintHandler(int sigint)
 {
+  loggerInfo("Se recibio SIGINT, cerrando servidor");
   serverDeinit(server);
   loggerDeinit();
   exit(EXIT_SUCCESS);
